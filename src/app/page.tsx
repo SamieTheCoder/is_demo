@@ -5,6 +5,9 @@ import HeroSlider from "@/components/HeroSlider";
 export default function Home() {
   return (
     <>
+      {/* Skip to content — accessibility */}
+      <a href="#main-content" className="skip-to-content">Skip to content</a>
+
       {/* Header */}
       <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/85">
         <div className="r-w flex min-h-[4.5rem] items-center justify-between gap-4 py-3">
@@ -40,7 +43,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main>
+      <main id="main-content">
         <article id="top">
           {/* Hero Section */}
           <section aria-labelledby="home-hero-title" className="r-w py-8 pt-4 md:py-12 grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,0.8fr)] lg:gap-8">
@@ -264,8 +267,13 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="r-w flex flex-col gap-1 py-2 border-t border-gray-200 text-gray-500 md:flex-row items-center md:justify-between">
+      <footer className="r-w flex flex-col gap-2 py-4 border-t border-gray-200 text-gray-500 md:flex-row items-center md:justify-between">
         <p>Copyright © 2026 - International Schooling</p>
+        <div className="flex items-center gap-4 text-sm">
+          <a href="#" className="hover:text-blue-600 transition-colors">Privacy Policy</a>
+          <span className="text-gray-300">|</span>
+          <a href="#" className="hover:text-blue-600 transition-colors">Terms of Service</a>
+        </div>
         <p>All Rights Reserved.</p>
       </footer>
 
