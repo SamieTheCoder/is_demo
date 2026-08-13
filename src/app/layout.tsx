@@ -9,12 +9,23 @@ const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   subsets: ["latin"],
   display: "swap",
+  // Only the weights this page actually renders. Without this the full
+  // variable range ships, which is dead weight on the critical path.
+  weight: ["400", "500", "600", "700"],
+  preload: true,
+  // Metric-matched fallback so swapping in the real font does not shift layout.
+  adjustFontFallback: true,
 });
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space",
   subsets: ["latin"],
   display: "swap",
+  // Headings only. 700 is Space Grotesk's ceiling; `font-extrabold` in the
+  // markup synthesises from this rather than downloading anything heavier.
+  weight: ["500", "700"],
+  preload: true,
+  adjustFontFallback: true,
 });
 
 export const metadata: Metadata = {

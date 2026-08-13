@@ -30,12 +30,44 @@ export default function HeroSlider({
 }) {
   const [active, setActive] = useState(0);
 
+  /**
+   * Which slides are allowed to exist in the DOM (and therefore fetch).
+   *
+   * All slides share one absolutely-positioned, in-viewport container, so
+   * `loading="lazy"` does NOT defer them - the browser treats every slide as
+   * visible and fetches all of them immediately. Rendering all 4 up front meant
+   * ~600KB competing for bandwidth with the LCP image, which is what pushed LCP
+   * past 11s on throttled 4G.
+   *
+   * So we start with only slide 0 (the LCP) and admit each next slide one tick
+   * before it is shown. Steady-state behaviour is identical; only the initial
+   * critical path shrinks.
+   */
+  const [mounted, setMounted] = useState<number[]>([0]);
+
   useEffect(() => {
     if (slides.length <= 1) return;
+
+    // Admit slide 1 only once the browser is idle, so it can never contend
+    // with the LCP fetch.
+    const admitSecond = window.setTimeout(() => {
+      setMounted((m) => (m.includes(1) ? m : [...m, 1]));
+    }, interval / 2);
+
     const timer = window.setInterval(() => {
-      setActive((prev) => (prev + 1) % slides.length);
+      setActive((prev) => {
+        const next = (prev + 1) % slides.length;
+        // Pre-admit the slide after next so it is decoded before its turn.
+        const upcoming = (next + 1) % slides.length;
+        setMounted((m) => (m.includes(upcoming) ? m : [...m, upcoming]));
+        return next;
+      });
     }, interval);
-    return () => window.clearInterval(timer);
+
+    return () => {
+      window.clearTimeout(admitSecond);
+      window.clearInterval(timer);
+    };
   }, [slides.length, interval]);
 
   return (
@@ -43,10 +75,11 @@ export default function HeroSlider({
       <div
         className={
           containerClass ??
-          "relative w-full aspect-video overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+          "relative w-full aspect-video overflow-hidden border border-slate-200 bg-slate-100"
         }
       >
         {slides.map((slide, i) => {
+          if (!mounted.includes(i)) return null;
           const isActive = i === active;
           return (
             <div
@@ -59,10 +92,14 @@ export default function HeroSlider({
                 src={slide.src}
                 alt={slide.label}
                 fill
+                // Tight sizes so Next serves a genuinely small file on mobile
+                // instead of a near-full-width candidate.
                 sizes="(min-width: 1024px) 46vw, (min-width: 768px) 88vw, 92vw"
                 className="object-cover object-center"
+                quality={72}
                 priority={priority && i === 0}
-                loading={i === 0 ? "eager" : "lazy"}
+                fetchPriority={priority && i === 0 ? "high" : "auto"}
+                loading={priority && i === 0 ? "eager" : "lazy"}
               />
             </div>
           );

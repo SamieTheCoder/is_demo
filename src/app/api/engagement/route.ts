@@ -1,7 +1,5 @@
 import { NextRequest } from "next/server";
 
-export const runtime = "edge";
-
 type EngagementPayload = {
   event?: string;
   dwell_ms?: number;
