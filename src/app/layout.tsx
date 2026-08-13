@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
+import { GoogleTagManager } from "@next/third-parties/google";
 import Script from "next/script";
 import "./globals.css";
 
@@ -43,60 +44,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       className={`${plusJakarta.variable} ${spaceGrotesk.variable} h-full`}
     >
-      <head>
-        {/* Preconnect to analytics domains for faster loading */}
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        <link rel="dns-prefetch" href="https://connect.facebook.net" />
-        <link rel="dns-prefetch" href="https://www.clarity.ms" />
-
-        {/* Google Tag Manager - head snippet */}
-        <Script id="gtm-head" strategy="afterInteractive">
-          {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-          })(window,document,'script','dataLayer','${ANALYTICS.GTM_ID}');`}
-        </Script>
-
-        {/* Facebook Pixel */}
-        <Script id="fb-pixel" strategy="afterInteractive">
-          {`!function(f,b,e,v,n,t,s)
-          {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-          n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-          if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-          n.queue=[];t=b.createElement(e);t.async=!0;
-          t.src=v;s=b.getElementsByTagName(e)[0];
-          s.parentNode.insertBefore(t,s)}(window, document,'script',
-          'https://connect.facebook.net/en_US/fbevents.js');
-          if(!window._fbPixelInit){window._fbPixelInit=true;fbq('init', '${ANALYTICS.FACEBOOK_PIXEL_ID}');}
-          fbq('track', 'PageView');`}
-        </Script>
-
-        {/* Microsoft Clarity */}
-        <Script id="clarity" strategy="afterInteractive">
-          {`(function(c,l,a,r,i,t,y){
-          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-          })(window, document, "clarity", "script", "${ANALYTICS.CLARITY_ID}");`}
-        </Script>
-
-        {/* Zoho SalesIQ Widget */}
-        <Script id="zoho-salesiq" strategy="lazyOnload">
-          {`var $zoho=$zoho || {};$zoho.salesiq = $zoho.salesiq || {widgetcode: "${ANALYTICS.ZOHO_WIDGET_CODE}", values:{},ready:function(){}};var d=document;s=d.createElement("script");s.type="text/javascript";s.id="zsiqscript";s.defer=true;s.src="https://salesiq.zohopublic.com/widget";var t=d.getElementsByTagName("script")[0];t.parentNode.insertBefore(s,t);`}
-        </Script>
-      </head>
       <body className="min-h-full flex flex-col font-sans antialiased">
-        {/* GTM noscript fallback */}
-        <noscript>
-          <iframe
-            src={`https://www.googletagmanager.com/ns.html?id=${ANALYTICS.GTM_ID}`}
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
         {children}
+
+        {/* GTM via @next/third-parties - uses web worker, no main-thread blocking */}
+        <GoogleTagManager gtmId={ANALYTICS.GTM_ID} />
+
+        {/* Facebook Pixel - deferred via requestIdleCallback pattern */}
+        <Script id="fb-pixel" strategy="lazyOnload">
+          {`(function(){if(window._fbPixelInit)return;window._fbPixelInit=true;var f=document.createElement('script');f.async=true;f.src='https://connect.facebook.net/en_US/fbevents.js';document.head.appendChild(f);f.onload=function(){fbq('init','${ANALYTICS.FACEBOOK_PIXEL_ID}');fbq('track','PageView');}})();`}
+        </Script>
+
+        {/* Microsoft Clarity - lazyOnload so it never blocks paint */}
+        <Script id="clarity" strategy="lazyOnload">
+          {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${ANALYTICS.CLARITY_ID}");`}
+        </Script>
+
+        {/* Zoho SalesIQ - lowest priority, loads after everything */}
+        <Script id="zoho-salesiq" strategy="lazyOnload">
+          {`setTimeout(function(){var $zoho=$zoho||{};$zoho.salesiq=$zoho.salesiq||{widgetcode:"${ANALYTICS.ZOHO_WIDGET_CODE}",values:{},ready:function(){}};var d=document;var s=d.createElement("script");s.type="text/javascript";s.id="zsiqscript";s.defer=true;s.src="https://salesiq.zohopublic.com/widget";var t=d.getElementsByTagName("script")[0];t.parentNode.insertBefore(s,t);},3000);`}
+        </Script>
       </body>
     </html>
   );
