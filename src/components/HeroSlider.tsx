@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import { HERO_BLUR } from "@/lib/hero-blur";
 
 interface Slide {
   src: string;
@@ -97,6 +98,10 @@ export default function HeroSlider({
                 sizes="(min-width: 1024px) 46vw, (min-width: 768px) 88vw, 92vw"
                 className="object-cover object-center"
                 quality={72}
+                // Inlined LQIP: paints approximate colour on first frame rather
+                // than a grey box, which is what Speed Index actually rewards.
+                placeholder={HERO_BLUR[slide.src] ? "blur" : "empty"}
+                blurDataURL={HERO_BLUR[slide.src]}
                 priority={priority && i === 0}
                 fetchPriority={priority && i === 0 ? "high" : "auto"}
                 loading={priority && i === 0 ? "eager" : "lazy"}

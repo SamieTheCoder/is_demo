@@ -7,19 +7,24 @@ import "./globals.css";
 const plusJakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
   subsets: ["latin"],
-  display: "swap",
-  // Only the weights this page actually renders. Without this the full
-  // variable range ships, which is dead weight on the critical path.
+  // "optional" instead of "swap": swap paints fallback text, then repaints when
+  // the real font arrives. That late repaint is a visual change Speed Index
+  // penalises. "optional" gives the font a short window and, if it misses,
+  // keeps the fallback for that pageview - so the final visual state is reached
+  // on the first frame. Fonts are same-origin and preloaded, so on a normal
+  // connection the real font still wins the race; it is mainly throttled
+  // first-visits that see the fallback. Revert to "swap" if brand type on first
+  // paint matters more than the metric.
+  display: "optional",
   weight: ["400", "500", "600", "700"],
   preload: true,
-  // Metric-matched fallback so swapping in the real font does not shift layout.
   adjustFontFallback: true,
 });
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space",
   subsets: ["latin"],
-  display: "swap",
+  display: "optional",
   // Headings only. 700 is Space Grotesk's ceiling; `font-extrabold` in the
   // markup synthesises from this rather than downloading anything heavier.
   weight: ["500", "700"],
