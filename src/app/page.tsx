@@ -1,6 +1,7 @@
 import MobileNav from "@/components/MobileNav";
 import HeroSlider from "@/components/HeroSlider";
 import LeadCaptureForm from "@/components/LeadCaptureForm";
+import { IconCheck, IconCross, IconArrowRight, IconPlay } from "@/components/Icon";
 
 export default function Home() {
   return (
@@ -26,7 +27,7 @@ export default function Home() {
           </a>
           <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
             {["Why Us", "Programs", "Accreditation", "Reviews", "FAQ"].map((item) => (
-              <a key={item} href={`#${item.toLowerCase().replace(" ", "-")}`} className="px-3 py-1.5 text-sm font-bold text-[#0f172a] border-2 border-transparent hover:border-[#0f172a] hover:bg-blue-50 transition-all">
+              <a key={item} href={`#${item.toLowerCase().replace(" ", "-")}`} className="px-3 py-1.5 text-sm font-bold text-[#0f172a] border-2 border-transparent hover:border-[#0f172a] hover:bg-blue-50 transition-[transform,box-shadow]">
                 {item}
               </a>
             ))}
@@ -257,7 +258,7 @@ export default function Home() {
       {/* WhatsApp - positioned above Zoho chat widget */}
       <a
         href="https://api.whatsapp.com/send?phone=17273902419"
-        className="fixed bottom-[90px] right-[18px] z-50 w-[50px] h-[50px] rounded-full bg-[#25D366] flex items-center justify-center shadow-[0_4px_12px_rgba(37,211,102,0.4)] transition-all duration-200 hover:scale-110 hover:shadow-[0_6px_20px_rgba(37,211,102,0.5)] active:scale-95"
+        className="fixed bottom-[90px] right-[18px] z-50 w-[50px] h-[50px] rounded-full bg-[#25D366] flex items-center justify-center shadow-[0_4px_12px_rgba(37,211,102,0.4)] transition-[transform,box-shadow] duration-200 hover:scale-110 hover:shadow-[0_6px_20px_rgba(37,211,102,0.5)] active:scale-95"
         aria-label="Chat on WhatsApp"
         target="_blank"
         rel="noopener noreferrer"
@@ -298,7 +299,7 @@ function BookDemoSection() {
               <ul className="space-y-3 text-sm text-slate-700">
                 {["School accreditations", "Right learning program", "American curriculum benefits", "Transcript & Diploma", "Affordable fee options", "University support"].map((item) => (
                   <li key={item} className="flex items-start gap-2">
-                    <span className="w-5 h-5 shrink-0 bg-emerald-100 border-2 border-[#0f172a] flex items-center justify-center text-xs font-bold text-emerald-800">&#10003;</span>
+                    <span className="w-5 h-5 shrink-0 bg-emerald-100 border-2 border-[#0f172a] flex items-center justify-center text-emerald-800"><IconCheck size={12} /></span>
                     <span className="font-medium">{item}</span>
                   </li>
                 ))}
@@ -314,26 +315,47 @@ function BookDemoSection() {
 /* ─── Calendar Placeholder ─── */
 /* ─── Framework Section ─── */
 function FrameworkSection() {
-  const leftCards = [
-    { name: "Fully Accredited WASC", color: "#dc2626" },
-    { name: "Fully Accredited NEASC", color: "#ea580c" },
-    { name: "Fully Accredited Cognia", color: "#0d9488" },
-    { name: "Students Athlete Support", color: "#ca8a04" },
-    { name: "University Pathways", color: "#16a34a" },
-    { name: "Project-Based Learning", color: "#2563eb" },
-    { name: "Clubs & engagement", color: "#7c3aed" },
-    { name: "AP Courses", color: "#be123c" },
+  /* Accreditation leads the section: it is the claim parents verify first.
+     accent drives the shadow, accentLight drives text so small type clears AA. */
+  const accreditations = [
+    { body: "WASC", full: "Western Association of Schools and Colleges", accent: "#dc2626", accentLight: "#f87171" },
+    { body: "NEASC", full: "New England Association of Schools and Colleges", accent: "#ea580c", accentLight: "#fb923c" },
+    { body: "Cognia", full: "Formerly AdvancED and SACS", accent: "#0d9488", accentLight: "#2dd4bf" },
   ];
-  const rightCards = [
-    { name: "Special Education Needs", color: "#c2410c" },
-    { name: "Personalized Learning", color: "#a16207" },
-    { name: "American Curriculum", color: "#15803d" },
-    { name: "Flexible Learning", color: "#1d4ed8" },
-    { name: "Career Counseling", color: "#6d28d9" },
-    { name: "EdTech Tools", color: "#2563eb" },
-    { name: "Live Online Classes", color: "#16a34a" },
-    { name: "Future-Ready Skills", color: "#ca8a04" },
+
+  /* Grouped by the question a parent is actually asking. A flat wall of
+     thirteen equal tiles made them read the whole list to find one answer. */
+  const included = [
+    {
+      heading: "What your child studies",
+      items: [
+        { name: "American Curriculum", note: "KG to Grade 12, US standards" },
+        { name: "AP Courses", note: "College credit earned early" },
+        { name: "Project-Based Learning", note: "Applied work, not memorization" },
+        { name: "Future-Ready Skills", note: "AI, coding, digital literacy" },
+        { name: "EdTech Tools", note: "One login for every resource" },
+      ],
+    },
+    {
+      heading: "How classes run",
+      items: [
+        { name: "Live Online Classes", note: "Real teachers, scheduled daily" },
+        { name: "Personalized Learning", note: "Pace set per student" },
+        { name: "Flexible Learning", note: "Works from any timezone" },
+        { name: "Clubs and Engagement", note: "Peers in 190+ countries" },
+      ],
+    },
+    {
+      heading: "Who supports them",
+      items: [
+        { name: "University Pathways", note: "Applications and transcripts handled" },
+        { name: "Career Counseling", note: "One to one guidance" },
+        { name: "Special Education Needs", note: "80+ trained special educators" },
+        { name: "Student Athlete Support", note: "Training scheduled around school" },
+      ],
+    },
   ];
+
   const stats = [
     { n: "3.8", l: "Average GPA" },
     { n: "100%", l: "University Acceptance" },
@@ -342,7 +364,7 @@ function FrameworkSection() {
   ];
 
   return (
-    <div className="il-page cv-auto">
+    <section className="il-page cv-auto">
       <div className="il-inner">
         <div className="il-head">
           <h2 className="il-h1">
@@ -353,88 +375,48 @@ function FrameworkSection() {
             Whether your family <span className="font-bold">travels, relocates, or needs flexibility</span> - we bring school to you.
           </p>
         </div>
-        <div className="il-body">
-          <div className="il-col">
-            {leftCards.map((card) => (
-              <div key={card.name} className="il-card">
-                <div className="il-card-bar" style={{ background: card.color }} />
-                <div className="il-card-info">
-                  <div className="il-card-name">{card.name}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="il-diag w-full">
-            <div className="il-tilt">
-              <div className="il-tilt-inner">
-                <svg className="il-svg" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
-                  <defs>
-                    <path id="ap-r1-0" d="M 312.6 49.3 A 251 251 0 0 1 488.1 133.8" />
-                    <path id="ap-r1-1" d="M 503.8 153.5 A 251 251 0 0 1 547.2 343.4" />
-                    <path id="ap-r1-2" d="M 420.1 520.3 A 251 251 0 0 0 541.5 368.0" />
-                    <path id="ap-r1-3" d="M 202.6 531.3 A 251 251 0 0 0 397.3 531.3" />
-                    <path id="ap-r1-4" d="M 58.4 368.0 A 251 251 0 0 0 179.8 520.3" />
-                    <path id="ap-r1-5" d="M 52.7 343.4 A 251 251 0 0 1 96.1 153.5" />
-                    <path id="ap-r1-6" d="M 111.8 133.8 A 251 251 0 0 1 287.3 49.3" />
-                    <path id="ap-r2-0" d="M 310.3 117.2 A 183 183 0 0 1 453 199.7" />
-                    <path id="ap-r2-1" d="M 463.3 217.5 A 183 183 0 0 1 463.3 382.4" />
-                    <path id="ap-r2-2" d="M 310.3 482.7 A 183 183 0 0 0 453 400.2" />
-                    <path id="ap-r2-3" d="M 146.9 400.2 A 183 183 0 0 0 289.6 482.7" />
-                    <path id="ap-r2-4" d="M 136.6 382.4 A 183 183 0 0 1 136.6 217.5" />
-                    <path id="ap-r2-5" d="M 146.9 199.7 A 183 183 0 0 1 289.6 117.2" />
-                    <path id="ap-r3-0" d="M 312 177.5 A 123 123 0 0 1 412 350.7" />
-                    <path id="ap-r3-1" d="M 200 371.6 A 123 123 0 0 0 399.9 371.6" />
-                    <path id="ap-r3-2" d="M 187.9 350.7 A 123 123 0 0 1 287.9 177.5" />
-                  </defs>
-                  <circle cx="300" cy="300" r="290" fill="none" stroke="#0f172a" strokeWidth="2" strokeDasharray="8 4" opacity="0.2" />
-                  {/* Ring 1 - Outer */}
-                  <g className="r1">
-                    <g><path d="M 304.5 10 A 290 290 0 0 1 523.8 115.6 L 469.8 160.1 A 220 220 0 0 0 303.4 80 Z" fill="#dc2626" stroke="#0f172a" strokeWidth="2" /><text fontSize="10" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#fff"><textPath href="#ap-r1-0" startOffset="50%" textAnchor="middle">ACCREDITED WASC</textPath></text></g>
-                    <g><path d="M 529.5 122.7 A 290 290 0 0 1 583.7 360 L 515.2 345.5 A 220 220 0 0 0 474.1 165.5 Z" fill="#ea580c" stroke="#0f172a" strokeWidth="2" /><text fontSize="10" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#fff"><textPath href="#ap-r1-1" startOffset="50%" textAnchor="middle">ACCREDITED NEASC</textPath></text></g>
-                    <g><path d="M 581.6 368.9 A 290 290 0 0 1 429.9 559.2 L 398.5 496.6 A 220 220 0 0 0 513.6 352.3 Z" fill="#0d9488" stroke="#0f172a" strokeWidth="2" /><text fontSize="10" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#fff"><textPath href="#ap-r1-2" startOffset="50%" textAnchor="middle">ACCREDITED COGNIA</textPath></text></g>
-                    <g><path d="M 421.7 563.2 A 290 290 0 0 1 178.2 563.2 L 207.6 499.6 A 220 220 0 0 0 392.3 499.6 Z" fill="#ca8a04" stroke="#0f172a" strokeWidth="2" /><text fontSize="10" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#fff"><textPath href="#ap-r1-3" startOffset="50%" textAnchor="middle">ATHLETE SUPPORT</textPath></text></g>
-                    <g><path d="M 170 559.2 A 290 290 0 0 1 18.3 368.9 L 86.3 352.3 A 220 220 0 0 0 201.4 496.6 Z" fill="#16a34a" stroke="#0f172a" strokeWidth="2" /><text fontSize="10" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#fff"><textPath href="#ap-r1-4" startOffset="50%" textAnchor="middle">UNIVERSITY PATHWAYS</textPath></text></g>
-                    <g><path d="M 16.2 360 A 290 290 0 0 1 70.4 122.7 L 125.8 165.5 A 220 220 0 0 0 84.7 345.5 Z" fill="#2563eb" stroke="#0f172a" strokeWidth="2" /><text fontSize="10" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#fff"><textPath href="#ap-r1-5" startOffset="50%" textAnchor="middle">PROJECT LEARNING</textPath></text></g>
-                    <g><path d="M 76.1 115.6 A 290 290 0 0 1 295.4 10 L 296.5 80 A 220 220 0 0 0 130.1 160.1 Z" fill="#7c3aed" stroke="#0f172a" strokeWidth="2" /><text fontSize="10" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#fff"><textPath href="#ap-r1-6" startOffset="50%" textAnchor="middle">CLUBS &amp; ACTIVITIES</textPath></text></g>
-                  </g>
-                  {/* Ring 2 - Middle */}
-                  <g className="r2">
-                    <g><path d="M 303.3 84 A 216 216 0 0 1 485.3 189 L 433.8 219.8 A 156 156 0 0 0 302.4 144 Z" fill="#fff" stroke="#be123c" strokeWidth="2.5" /><text fontSize="9" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#be123c"><textPath href="#ap-r2-0" startOffset="50%" textAnchor="middle">AP COURSES</textPath></text></g>
-                    <g><path d="M 488.7 194.9 A 216 216 0 0 1 488.7 405 L 436.3 375.8 A 156 156 0 0 0 436.3 224.1 Z" fill="#fff" stroke="#c2410c" strokeWidth="2.5" /><text fontSize="9" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#c2410c"><textPath href="#ap-r2-1" startOffset="50%" textAnchor="middle">SPECIAL EDUCATION</textPath></text></g>
-                    <g><path d="M 485.3 410.9 A 216 216 0 0 1 303.3 515.9 L 302.4 455.9 A 156 156 0 0 0 433.8 380.1 Z" fill="#fff" stroke="#a16207" strokeWidth="2.5" /><text fontSize="9" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#a16207"><textPath href="#ap-r2-2" startOffset="50%" textAnchor="middle">PERSONALIZED</textPath></text></g>
-                    <g><path d="M 296.6 515.9 A 216 216 0 0 1 114.6 410.9 L 166.1 380.1 A 156 156 0 0 0 297.5 455.9 Z" fill="#fff" stroke="#15803d" strokeWidth="2.5" /><text fontSize="9" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#15803d"><textPath href="#ap-r2-3" startOffset="50%" textAnchor="middle">AMERICAN CURRICULUM</textPath></text></g>
-                    <g><path d="M 111.2 405 A 216 216 0 0 1 111.2 194.9 L 163.6 224.1 A 156 156 0 0 0 163.6 375.8 Z" fill="#fff" stroke="#1d4ed8" strokeWidth="2.5" /><text fontSize="9" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#1d4ed8"><textPath href="#ap-r2-4" startOffset="50%" textAnchor="middle">FLEXIBLE LEARNING</textPath></text></g>
-                    <g><path d="M 114.6 189 A 216 216 0 0 1 296.6 84 L 297.5 144 A 156 156 0 0 0 166.1 219.8 Z" fill="#fff" stroke="#6d28d9" strokeWidth="2.5" /><text fontSize="9" fontWeight="600" fontFamily="system-ui,sans-serif" fill="#6d28d9"><textPath href="#ap-r2-5" startOffset="50%" textAnchor="middle">CAREER COUNSELING</textPath></text></g>
-                  </g>
-                  {/* Ring 3 - Inner */}
-                  <g className="r3">
-                    <g><path d="M 302.3 148 A 152 152 0 0 1 432.8 373.9 L 385.6 347.6 A 98 98 0 0 0 301.5 202 Z" fill="#2563eb" stroke="#0f172a" strokeWidth="2" /><text fontSize="12" fontWeight="700" fontFamily="system-ui,sans-serif" fill="#fff"><textPath href="#ap-r3-0" startOffset="50%" textAnchor="middle">EDTECH</textPath></text></g>
-                    <g><path d="M 430.4 378 A 152 152 0 0 1 169.5 378 L 215.9 350.3 A 98 98 0 0 0 384 350.3 Z" fill="#16a34a" stroke="#0f172a" strokeWidth="2" /><text fontSize="12" fontWeight="700" fontFamily="system-ui,sans-serif" fill="#fff"><textPath href="#ap-r3-1" startOffset="50%" textAnchor="middle">LIVE CLASSES</textPath></text></g>
-                    <g><path d="M 167.1 373.9 A 152 152 0 0 1 297.6 148 L 298.4 202 A 98 98 0 0 0 214.3 347.6 Z" fill="#ca8a04" stroke="#0f172a" strokeWidth="2" /><text fontSize="12" fontWeight="700" fontFamily="system-ui,sans-serif" fill="#fff"><textPath href="#ap-r3-2" startOffset="50%" textAnchor="middle">FUTURE SKILLS</textPath></text></g>
-                  </g>
-                  <circle cx="300" cy="300" r="96" fill="#eff6ff" stroke="#0f172a" strokeWidth="2.5" />
-                </svg>
-              </div>
-              <div className="il-core">
-                <div className="il-core-circle">
-                  <div className="il-core-title">FRAMEWORK</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="il-col right">
-            {rightCards.map((card) => (
-              <div key={card.name} className="il-card">
-                <div className="il-card-bar" style={{ background: card.color }} />
-                <div className="il-card-info">
-                  <div className="il-card-name">{card.name}</div>
-                </div>
-              </div>
+
+        {/* Accreditation gets the heaviest visual weight in the section. */}
+        <div className="fw-accred">
+          {accreditations.map((a) => (
+            <article
+              key={a.body}
+              className="fw-accred-tile stamp"
+              style={{ "--accent": a.accent, "--accent-light": a.accentLight } as React.CSSProperties}
+            >
+              <p className="fw-accred-body">{a.body}</p>
+              <p className="fw-accred-full">{a.full}</p>
+              <p className="fw-accred-country">Accredited in the USA</p>
+            </article>
+          ))}
+        </div>
+
+        <div className="fw-included">
+          <h3 className="fw-included-title">
+            Everything below is included in one tuition
+          </h3>
+          <div className="fw-groups">
+            {included.map((group) => (
+              <section key={group.heading} className="fw-group stamp">
+                <h4 className="fw-group-heading">{group.heading}</h4>
+                <dl className="fw-group-list">
+                  {group.items.map((item) => (
+                    <div key={item.name} className="fw-item">
+                      <dt className="fw-item-name">
+                        <IconCheck size={15} className="fw-item-check" />
+                        {item.name}
+                      </dt>
+                      <dd className="fw-item-note">{item.note}</dd>
+                    </div>
+                  ))}
+                </dl>
+              </section>
             ))}
           </div>
         </div>
-        <div className="mt-8 py-6 flex flex-col items-center justify-center">
-          <h3 className="mb-5 text-center font-extrabold text-xl text-[#0f172a]">School results</h3>
+
+        <div className="fw-results">
+          <h3 className="fw-results-title">School results</h3>
           <div className="il-stats">
             {stats.map((s) => (
               <div key={s.l} className="il-stat">
@@ -445,7 +427,7 @@ function FrameworkSection() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -499,7 +481,7 @@ function ProgramCard({ title, subtitle, features, desc, image, accent }: { title
         <ul className="space-y-2">
           {features.map((f) => (
             <li key={f} className="flex items-center gap-2 text-sm">
-              <span className="w-4 h-4 shrink-0 border-2 border-[#0f172a] flex items-center justify-center text-[9px] font-bold" style={{ background: `${accent}15`, color: accent }}>&#10140;</span>
+              <span className="w-4 h-4 shrink-0 border-2 border-[#0f172a] flex items-center justify-center" style={{ background: `${accent}15`, color: accent }}><IconArrowRight size={10} /></span>
               <span className="text-slate-700 font-medium">{f}</span>
             </li>
           ))}
@@ -509,51 +491,81 @@ function ProgramCard({ title, subtitle, features, desc, image, accent }: { title
   );
 }
 
-/* ─── Comparison Table ─── */
-function ComparisonTable() {
-  const rows = [
-    { need: "Curriculum", is: "100% International American", other: "Old traditional methods" },
-    { need: "Teachers", is: "600+ certified international", other: "Limited and unverified" },
-    { need: "Learning", is: "Personalized for every child", other: "One-size-fits-all" },
-    { need: "Classes", is: "Live and interactive", other: "Pre-recorded only" },
-    { need: "Assessments", is: "Continuous and ongoing", other: "No structured tests" },
-    { need: "Environment", is: "Safe from home", other: "Unmonitored online" },
-    { need: "Skills", is: "Future-ready: AI, Digital", other: "Outdated skill sets" },
-    { need: "Schedule", is: "Fully flexible", other: "Fixed rigid timings" },
-    { need: "Counseling", is: "Career + personal", other: "No guidance" },
-    { need: "PTMs", is: "Regular meetings", other: "Term-end only" },
-    { need: "Transfer", is: "Seamless credits", other: "No transfer" },
-    { need: "Activities", is: "Global clubs & networking", other: "None" },
-  ];
+/* ─── Comparison ───
+   Twelve comparisons grouped into four themed cards so the section scans as a
+   short set of decisions rather than one long table. */
+const COMPARISON_GROUPS = [
+  {
+    group: "Academics",
+    rows: [
+      { need: "Curriculum", is: "100% International American", other: "Old traditional methods" },
+      { need: "Teachers", is: "600+ certified international", other: "Limited and unverified" },
+      { need: "Learning", is: "Personalized for every child", other: "One-size-fits-all" },
+    ],
+  },
+  {
+    group: "In the classroom",
+    rows: [
+      { need: "Classes", is: "Live and interactive", other: "Pre-recorded only" },
+      { need: "Assessments", is: "Continuous and ongoing", other: "No structured tests" },
+      { need: "Skills", is: "Future-ready: AI and digital", other: "Outdated skill sets" },
+    ],
+  },
+  {
+    group: "Support",
+    rows: [
+      { need: "Counseling", is: "Career and personal", other: "No guidance" },
+      { need: "Parent meetings", is: "Regular, every term", other: "Term-end only" },
+      { need: "Environment", is: "Safe, from home", other: "Unmonitored online" },
+    ],
+  },
+  {
+    group: "Flexibility",
+    rows: [
+      { need: "Schedule", is: "Fully flexible", other: "Fixed rigid timings" },
+      { need: "Credit transfer", is: "Seamless credits", other: "No transfer" },
+      { need: "Activities", is: "Global clubs and networking", other: "None" },
+    ],
+  },
+];
 
+function ComparisonTable() {
   return (
     <section className="scroll-mt-20 border-y-[3px] border-[#0f172a] bg-slate-50 py-16 md:py-20 cv-auto">
-      <div className="r-w space-y-8">
-        <header className="text-center max-w-2xl mx-auto">
+      <div className="r-w">
+        <header className="text-center max-w-2xl mx-auto mb-10">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tighter text-[#0f172a]">
             Why parents choose <span className="text-blue-700">International Schooling</span>
           </h2>
         </header>
-        <div className="neo-table overflow-x-auto">
-          <table className="w-full border-collapse">
-            <caption className="sr-only">Comparison between International Schooling and other online schools</caption>
-            <thead>
-              <tr className="text-sm font-extrabold">
-                <th className="neo-table-cell bg-emerald-50 text-left text-[#0f172a] p-4">Need</th>
-                <th className="neo-table-cell bg-blue-700 text-center text-white p-4">International Schooling</th>
-                <th className="neo-table-cell bg-slate-100 text-center text-slate-600 p-4">Other schools</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => (
-                <tr key={row.need} className="text-sm">
-                  <th scope="row" className="border-2 border-[#0f172a] bg-emerald-50/50 p-3 md:p-4 text-left font-bold text-[#0f172a]">{row.need}</th>
-                  <td className="border-2 border-[#0f172a] bg-blue-50 p-3 md:p-4 text-center font-semibold text-blue-900">{row.is}</td>
-                  <td className="border-2 border-[#0f172a] bg-white p-3 md:p-4 text-center text-slate-500">{row.other}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+
+        <div className="cmp-cards">
+          {COMPARISON_GROUPS.map(({ group, rows }) => (
+            <article key={group} className="cmp-card">
+              <h3 className="cmp-card-title">{group}</h3>
+              <dl className="cmp-rows">
+                {rows.map((row) => (
+                  <div key={row.need} className="cmp-row">
+                    <dt className="cmp-need">{row.need}</dt>
+                    <dd className="cmp-line cmp-line-is">
+                      <span className="cmp-mark cmp-mark-is"><IconCheck size={13} /></span>
+                      <span>
+                        <span className="cmp-who">International Schooling</span>
+                        <span className="cmp-val">{row.is}</span>
+                      </span>
+                    </dd>
+                    <dd className="cmp-line cmp-line-other">
+                      <span className="cmp-mark cmp-mark-other"><IconCross size={13} /></span>
+                      <span>
+                        <span className="cmp-who">Other online schools</span>
+                        <span className="cmp-val">{row.other}</span>
+                      </span>
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </article>
+          ))}
         </div>
       </div>
     </section>
@@ -601,19 +613,17 @@ function VideoReviews() {
 
 function VideoCard({ videoId, label }: { videoId: string; label: string }) {
   return (
-    <article className="group bg-white border-[2.5px] border-[#0f172a] rounded-xl overflow-hidden shadow-[4px_4px_0_0_#0f172a] transition-all duration-200 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_#1d4ed8]">
+    <article className="group bg-white border-[2.5px] border-[#0f172a] overflow-hidden shadow-[4px_4px_0_0_#0f172a] transition-[transform,box-shadow] duration-200 hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0_0_#1d4ed8]">
       <div className="relative aspect-video bg-slate-100 overflow-hidden">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={`https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`} alt={label} width={400} height={225} loading="lazy" decoding="async" className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
-        {/* Play button */}
         <span className="absolute inset-0 flex items-center justify-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white border-[2.5px] border-[#0f172a] text-red-600 shadow-[2px_2px_0_0_#0f172a] transition-transform duration-200 group-hover:scale-110">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+          <span className="flex h-12 w-12 items-center justify-center rounded-full bg-white/90 border-2 border-[#0f172a] shadow-[2px_2px_0_0_#0f172a] transition-transform duration-200 group-hover:scale-110">
+            <IconPlay size={20} className="text-[#dc2626]" />
           </span>
         </span>
       </div>
-      <div className="px-4 py-3 flex items-center gap-2 bg-slate-50 border-t-[2px] border-[#0f172a]">
-        <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+      <div className="px-4 py-2.5 bg-slate-50 border-t-[2px] border-[#0f172a]">
         <p className="text-sm font-bold text-[#0f172a]">{label}</p>
       </div>
     </article>

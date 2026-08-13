@@ -93,13 +93,8 @@ export default function HeroSlider({
                 src={slide.src}
                 alt={slide.label}
                 fill
-                // Tight sizes so Next serves a genuinely small file on mobile
-                // instead of a near-full-width candidate.
                 sizes="(min-width: 1024px) 46vw, (min-width: 768px) 88vw, 92vw"
                 className="object-cover object-center"
-                quality={72}
-                // Inlined LQIP: paints approximate colour on first frame rather
-                // than a grey box, which is what Speed Index actually rewards.
                 placeholder={HERO_BLUR[slide.src] ? "blur" : "empty"}
                 blurDataURL={HERO_BLUR[slide.src]}
                 priority={priority && i === 0}

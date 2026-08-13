@@ -5,6 +5,23 @@
     -apple-system, "Segoe UI", sans-serif;
   --font-serif: var(--font-space), "Space Grotesk", "Avenir Next",
     "Helvetica Neue", "Segoe UI", sans-serif;
+
+  /* Brand palette. These four carried the whole design as repeated literals;
+     naming them means a palette change is one edit, not 176. */
+  --color-ink: #0f172a;
+  --color-brand: #1d4ed8;
+  --color-grow: #047857;
+  --color-alert: #dc2626;
+  --color-page: #fafafa;
+
+  /* Structure. Neobrutalism depends on these being uniform. */
+  --stroke: 2px;
+  --stroke-thick: 3px;
+  --lift: 4px;
+  --lift-lg: 6px;
+
+  /* Exponential ease-out. No overshoot. */
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ═══════════════════════════════════════════════════
@@ -294,69 +311,313 @@ details[open] summary ~ div {
   line-height: 1.7;
 }
 
-.il-body {
+/* ─── Accreditation tiles ─── */
+.fw-accred {
   display: grid;
-  grid-template-columns: 240px 1fr 240px;
-  gap: 24px;
-  align-items: center;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  margin-bottom: 48px;
 }
 
-.il-col { display: flex; flex-direction: column; gap: 8px; }
-
-.il-card {
-  background: #fff;
-  border: 2px solid #0f172a;
-  padding: 10px 12px 10px 14px;
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  position: relative;
-  overflow: hidden;
-  cursor: default;
+.fw-accred-tile {
+  background: #0f172a;
+  border: 3px solid #0f172a;
+  box-shadow: 6px 6px 0 0 var(--accent);
+  padding: 20px 18px;
   transition: transform 0.15s, box-shadow 0.15s;
 }
 
-.il-card:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0 0 #0f172a;
+.fw-accred-tile:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 9px 9px 0 0 var(--accent);
 }
 
-.il-card-bar {
-  position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 4px;
+.fw-accred-body {
+  font-family: var(--font-serif), sans-serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: #fff;
 }
 
-.il-card-info { flex: 1; min-width: 0; }
-.il-card-ring { font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1px; }
-.il-card-name { font-size: 0.75rem; font-weight: 600; color: #0f172a; line-height: 1.3; }
-
-.il-dot {
-  position: absolute; right: -3px; top: 50%; transform: translateY(-50%);
-  width: 6px; height: 6px; border-radius: 50%; border: 2px solid #fff;
+.fw-accred-full {
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #cbd5e1;
+  margin-top: 8px;
 }
 
-.il-col.right .il-dot { right: auto; left: -3px; }
-.il-diag { position: relative; display: flex; align-items: center; justify-content: center; }
-.il-tilt { perspective: 1400px; position: relative; width: 100%; max-width: 560px; }
-.il-tilt-inner { transform-style: preserve-3d; }
-.il-svg { width: 100%; aspect-ratio: 1; overflow: visible; }
-
-.il-core {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-  z-index: 20; pointer-events: none;
+.fw-accred-country {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 3px 9px;
+  border: 2px solid var(--accent-light);
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-light);
 }
 
-.il-core-circle {
-  width: 110px; height: 110px;
-  background: #0f172a; border: 3px solid #1d4ed8;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 14px;
-  box-shadow: 4px 4px 0 0 #1d4ed8;
+/* ─── Everything included: grouped by parent question ─── */
+.fw-included { margin-bottom: 8px; }
+
+.fw-included-title {
+  font-size: clamp(1.15rem, 2.4vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  color: var(--color-ink);
+  margin-bottom: 20px;
+  text-wrap: balance;
 }
 
-.il-core-icon { font-size: 22px; margin-bottom: 4px; }
-.il-core-title { font-size: 11px; font-weight: 700; color: #fff; letter-spacing: 0.04em; }
+.fw-groups {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  align-items: start;
+}
+
+.fw-group {
+  background: #fff;
+  border: 2.5px solid var(--color-ink);
+  box-shadow: var(--lift) var(--lift) 0 0 var(--color-ink);
+}
+
+.fw-group-heading {
+  background: var(--color-ink);
+  color: #fff;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 11px 16px;
+}
+
+.fw-group-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.fw-item {
+  padding: 13px 16px;
+}
+
+.fw-item + .fw-item {
+  border-top: 2px solid #e2e8f0;
+}
+
+.fw-item-name {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 800;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  color: var(--color-ink);
+}
+
+.fw-item-check {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--color-grow);
+}
+
+.fw-item-note {
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.45;
+  color: #475569;
+  margin-top: 3px;
+  padding-left: 23px;
+}
+
+.fw-results {
+  margin-top: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.fw-results-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-ink);
+  margin-bottom: 18px;
+}
+
+/*
+  Stamp-in: blocks travel from up-left onto their own hard shadow as they enter
+  view. Transform and opacity only, so it stays on the compositor. Progressive
+  enhancement: without scroll-timeline support, or under reduced motion, they
+  render in their final position.
+*/
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .stamp {
+      animation: fw-stamp-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% entry 55%;
+    }
+  }
+}
+
+@keyframes fw-stamp-in {
+  from {
+    opacity: 0;
+    transform: translate(-10px, -12px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@media (max-width: 900px) {
+  .fw-groups { grid-template-columns: 1fr; gap: 14px; }
+}
+
+@media (max-width: 640px) {
+  .fw-accred { grid-template-columns: 1fr; gap: 12px; margin-bottom: 36px; }
+  .fw-accred-tile { padding: 16px; }
+  .fw-included-title, .fw-results-title { font-size: 1.1rem; }
+  .fw-item { padding: 12px 14px; }
+}
+
+/* ─── Comparison cards ─── */
+.cmp-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 34px;
+}
+
+.cmp-card {
+  position: relative;
+  box-sizing: border-box;
+  width: 100%;
+  background: #fff;
+  border: 3px solid #0f172a;
+  box-shadow: 6px 6px 0 0 #1d4ed8;
+  overflow: hidden;
+}
+
+/* Group name reads as its own header band so each group is a distinct block
+   rather than one more card in a uniform list. */
+.cmp-card-title {
+  background: #0f172a;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 13px 20px;
+}
+
+.cmp-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+}
+
+.cmp-row {
+  border: 2px solid #0f172a;
+  overflow: hidden;
+}
+
+/* Light label, so the only dark band in each block is the group header. */
+.cmp-need {
+  background: #ecfdf5;
+  color: #0f172a;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 9px 13px;
+  border-bottom: 2px solid #0f172a;
+}
+
+.cmp-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 13px;
+}
+
+.cmp-line-is { background: #eff6ff; border-bottom: 2px solid #0f172a; }
+.cmp-line-other { background: #fff; }
+
+.cmp-mark {
+  flex-shrink: 0;
+  width: 21px;
+  height: 21px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #0f172a;
+  font-size: 0.68rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.cmp-mark-is { background: #047857; color: #fff; }
+.cmp-mark-other { background: #f1f5f9; color: #64748b; }
+
+.cmp-who {
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+.cmp-line-is .cmp-who { color: #1d4ed8; }
+
+.cmp-val {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1.4;
+  color: #0f172a;
+}
+
+.cmp-line-other .cmp-val { font-weight: 500; color: #475569; }
+
+/* Above the stack breakpoint each comparison becomes a single readable row. */
+@media (min-width: 768px) {
+  .cmp-cards { gap: 40px; }
+  .cmp-card-title { font-size: 0.95rem; padding: 15px 26px; }
+  .cmp-rows { padding: 24px 26px; gap: 14px; }
+
+  .cmp-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 1fr;
+    align-items: stretch;
+  }
+
+  .cmp-need {
+    display: flex;
+    align-items: center;
+    font-size: 0.72rem;
+    border-bottom: none;
+    border-right: 2px solid #0f172a;
+  }
+
+  .cmp-line-is {
+    border-bottom: none;
+    border-right: 2px solid #0f172a;
+  }
+}
+
+@media (min-width: 1024px) {
+  .cmp-row { grid-template-columns: 190px 1fr 1fr; }
+  .cmp-val { font-size: 0.95rem; }
+}
 
 .il-stats {
   display: flex; justify-content: center; max-width: 600px;
@@ -382,33 +643,15 @@ details[open] summary ~ div {
   letter-spacing: 0.06em; text-transform: uppercase;
 }
 
-@media (max-width: 900px) {
-  .il-body { grid-template-columns: 1fr; gap: 30px; }
-  .il-col, .il-col.right { flex-direction: row; flex-wrap: wrap; }
-  .il-card { flex: 1 1 180px; }
-  .il-tilt { max-width: 420px; margin: 0 auto; }
-}
-
 @media (max-width: 560px) {
-  .il-tilt { max-width: 300px; }
-  .il-core-circle { width: 76px; height: 76px; }
-  .il-core-icon { font-size: 16px; }
-  .il-core-title { font-size: 9px; }
   .il-stats { flex-wrap: wrap; }
   .il-stat { flex: 1 1 45%; }
   .il-stat:nth-child(2) { border-right: none; }
   .il-stat:nth-child(3), .il-stat:nth-child(4) { border-top: 2.5px solid #0f172a; }
 }
 
-/* Wheel rotation */
-@keyframes cw { to { transform: rotate(360deg); } }
-@keyframes ccw { to { transform: rotate(-360deg); } }
-.r1 { animation: cw 38s linear infinite; transform-origin: 300px 300px; }
-.r2 { animation: ccw 28s linear infinite; transform-origin: 300px 300px; }
-.r3 { animation: cw 18s linear infinite; transform-origin: 300px 300px; }
-
 @media (prefers-reduced-motion: reduce) {
-  .r1, .r2, .r3 { animation: none; }
+  .stamp { animation: none; opacity: 1; transform: none; }
 }
 
 /* ─── Neo-brutal CTA button ─── */
@@ -509,7 +752,7 @@ a[aria-label="Chat on WhatsApp"] {
 }
 
 .neo-animate {
-  animation: neo-fade-up 0.5s cubic-bezier(0.22, 0.68, 0, 1.2) both;
+  animation: neo-fade-up 0.5s var(--ease-out-quint) both;
 }
 
 .neo-animate-delay-1 { animation-delay: 0.1s; }

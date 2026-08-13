@@ -42,9 +42,9 @@ export default function LeadCaptureForm() {
 
   if (status === "success") {
     return (
-      <div className="text-center py-10 px-4">
-        <div className="w-14 h-14 mx-auto mb-4 border-[2.5px] border-[#0f172a] bg-emerald-50 flex items-center justify-center shadow-[3px_3px_0_0_#059669]">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-600"><polyline points="20 6 9 17 4 12" /></svg>
+      <div role="status" aria-live="polite" className="text-center py-10 px-4">
+        <div className="w-14 h-14 mx-auto mb-4 border-[2.5px] border-[#0f172a] bg-emerald-50 flex items-center justify-center shadow-[3px_3px_0_0_#047857]">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-emerald-700" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
         </div>
         <h3 className="text-xl font-extrabold text-[#0f172a] mb-2">Demo booked</h3>
         <p className="text-sm text-slate-600">Our academic team will contact you within 4 hours to confirm your slot.</p>
@@ -65,7 +65,7 @@ export default function LeadCaptureForm() {
           required
           value={formData.parentName}
           onChange={(e) => setFormData((p) => ({ ...p, parentName: e.target.value }))}
-          className="w-full border-2 border-[#0f172a] bg-white px-3 py-2.5 text-sm font-medium text-[#0f172a] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition"
+          className="w-full border-2 border-[#0f172a] bg-white px-3 py-2.5 text-sm font-medium text-[#0f172a] placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition"
           placeholder="Your full name"
         />
       </div>
@@ -81,7 +81,7 @@ export default function LeadCaptureForm() {
           required
           value={formData.email}
           onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
-          className="w-full border-2 border-[#0f172a] bg-white px-3 py-2.5 text-sm font-medium text-[#0f172a] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition"
+          className="w-full border-2 border-[#0f172a] bg-white px-3 py-2.5 text-sm font-medium text-[#0f172a] placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition"
           placeholder="parent@email.com"
         />
       </div>
@@ -97,7 +97,7 @@ export default function LeadCaptureForm() {
           required
           value={formData.phone}
           onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
-          className="w-full border-2 border-[#0f172a] bg-white px-3 py-2.5 text-sm font-medium text-[#0f172a] placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition"
+          className="w-full border-2 border-[#0f172a] bg-white px-3 py-2.5 text-sm font-medium text-[#0f172a] placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition"
           placeholder="+971 50 123 4567"
         />
       </div>
@@ -154,9 +154,18 @@ export default function LeadCaptureForm() {
         {status === "submitting" ? "Booking..." : "Book Free Demo"}
       </button>
 
-      {status === "error" && (
-        <p className="text-sm text-red-700 font-bold text-center">Something went wrong. Please try again.</p>
-      )}
+      {/*
+        Live region is always mounted so screen readers register it before a
+        message ever appears; the child is null when idle rather than an empty
+        string, which would render no text node and desync hydration.
+      */}
+      <div aria-live="assertive" aria-atomic="true">
+        {status === "error" ? (
+          <p className="text-sm text-red-700 font-bold text-center">
+            Something went wrong. Please try again, or message us on WhatsApp.
+          </p>
+        ) : null}
+      </div>
 
       <p className="text-[11px] text-slate-500 text-center leading-relaxed">
         By submitting, you agree to be contacted by our academic team. No spam.
