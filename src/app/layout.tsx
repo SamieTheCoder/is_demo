@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
-import { GoogleTagManager } from "@next/third-parties/google";
-import Script from "next/script";
 import EngagementTracker from "@/components/EngagementTracker";
+import ThirdPartyScripts from "@/components/ThirdPartyScripts";
 import "./globals.css";
 
 const plusJakarta = Plus_Jakarta_Sans({
@@ -85,26 +84,15 @@ document.addEventListener('visibilitychange',function(){if(document.visibilitySt
       <body className="min-h-full flex flex-col font-sans antialiased">
         {children}
 
-        {/* GTM via @next/third-parties - uses web worker, no main-thread blocking */}
-        <GoogleTagManager gtmId={ANALYTICS.GTM_ID} />
+        {/* GTM, Meta Pixel, Clarity and Zoho load on first interaction or after
+            an idle fallback. See ThirdPartyScripts for the reasoning: together
+            they are ~275KB+ of gzipped JS and were the dominant TBT cost. */}
+        <ThirdPartyScripts />
 
-        {/* Bounce + dwell-time tracking (mounted after GTM so dataLayer exists) */}
+        {/* Bounce + dwell tracking. Independent of the above - the inline
+            snippet in <head> owns exits via sendBeacon, so bounce data survives
+            even when no vendor script ever loads. */}
         <EngagementTracker />
-
-        {/* Facebook Pixel - deferred via requestIdleCallback pattern */}
-        <Script id="fb-pixel" strategy="lazyOnload">
-          {`(function(){if(window._fbPixelInit)return;window._fbPixelInit=true;var f=document.createElement('script');f.async=true;f.src='https://connect.facebook.net/en_US/fbevents.js';document.head.appendChild(f);f.onload=function(){fbq('init','${ANALYTICS.FACEBOOK_PIXEL_ID}');fbq('track','PageView');}})();`}
-        </Script>
-
-        {/* Microsoft Clarity - lazyOnload so it never blocks paint */}
-        <Script id="clarity" strategy="lazyOnload">
-          {`(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","${ANALYTICS.CLARITY_ID}");`}
-        </Script>
-
-        {/* Zoho SalesIQ - lowest priority, loads after everything */}
-        <Script id="zoho-salesiq" strategy="lazyOnload">
-          {`setTimeout(function(){var $zoho=$zoho||{};$zoho.salesiq=$zoho.salesiq||{widgetcode:"${ANALYTICS.ZOHO_WIDGET_CODE}",values:{},ready:function(){}};var d=document;var s=d.createElement("script");s.type="text/javascript";s.id="zsiqscript";s.defer=true;s.src="https://salesiq.zohopublic.com/widget";var t=d.getElementsByTagName("script")[0];t.parentNode.insertBefore(s,t);},3000);`}
-        </Script>
       </body>
     </html>
   );
