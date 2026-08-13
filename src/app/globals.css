@@ -457,24 +457,9 @@ header.sticky {
   box-shadow: 0 4px 0 0 rgba(15, 23, 42, 0.05);
 }
 
-/* ─── WhatsApp pulse ─── */
+/* ─── Floating action buttons (WhatsApp + Zoho) ─── */
 a[aria-label="Chat on WhatsApp"] {
-  position: relative;
-}
-
-a[aria-label="Chat on WhatsApp"]::before {
-  content: "";
-  position: absolute;
-  inset: -4px;
-  border-radius: 50%;
-  background: rgba(37, 211, 102, 0.15);
-  animation: wa-pulse 2s ease-in-out infinite;
-  z-index: -1;
-}
-
-@keyframes wa-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.5; }
-  50% { transform: scale(1.2); opacity: 0; }
+  will-change: transform;
 }
 
 /* ─── Video card ─── */
